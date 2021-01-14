@@ -1,8 +1,6 @@
-using System;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using ClimbingGearBackend.Controllers;
 using ClimbingGearBackend.Models;
@@ -28,23 +26,29 @@ namespace ClimbingGearBackend.Tests
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
 
-        var one = new Gear {
+        var one = new Gear
+        {
           Id = 1,
           Name = "Cam",
           Description = "Just a cam",
-          Brand = "TestCams" };
-        
-        var two = new Gear {
+          Brand = "TestCams"
+        };
+
+        var two = new Gear
+        {
           Id = 2,
           Name = "Nut",
           Description = "Just a nut",
-          Brand = "TestNuts" };
-        
-        var three = new Gear {
+          Brand = "TestNuts"
+        };
+
+        var three = new Gear
+        {
           Id = 3,
           Name = "Carabiner",
           Description = "Just a carabiner",
-          Brand = "TestCarabiners" };
+          Brand = "TestCarabiners"
+        };
 
         context.AddRange(one, two, three);
 
@@ -59,7 +63,7 @@ namespace ClimbingGearBackend.Tests
         var controller = new GearController(context);
 
         var result = await controller.GetGear();
-        
+
         var gearList = new List<GearDTO>(result.Value);
         Assert.Equal(3, gearList.Count);
         Assert.Equal("Cam", gearList[0].Name);
@@ -91,10 +95,7 @@ namespace ClimbingGearBackend.Tests
 
         var result = await controller.GetGear(42);
 
-        var resultObject = new NotFoundObjectResult(result.Value);
-
-        Assert.IsType<NotFoundObjectResult>(resultObject);
-        Assert.Equal(404, resultObject.StatusCode);
+        Assert.IsType<NotFoundResult>(result.Result);
       }
     }
 
@@ -111,9 +112,9 @@ namespace ClimbingGearBackend.Tests
           Name = "EditedGear",
         };
 
-        var result = await controller.UpdateGear(1, gear) as NoContentResult;
+        var result = await controller.UpdateGear(1, gear);
 
-        Assert.Equal(204, result.StatusCode);
+        Assert.IsType<NoContentResult>(result);
       }
     }
 
@@ -130,9 +131,9 @@ namespace ClimbingGearBackend.Tests
           Name = "EditedGear",
         };
 
-        var result = await controller.UpdateGear(1, gear) as BadRequestResult;
+        var result = await controller.UpdateGear(1, gear);
 
-        Assert.Equal(400, result.StatusCode);
+        Assert.IsType<BadRequestResult>(result);
       }
     }
 
@@ -149,9 +150,9 @@ namespace ClimbingGearBackend.Tests
           Name = "EditedGear",
         };
 
-        var result = await controller.UpdateGear(42, gear) as NotFoundResult;
+        var result = await controller.UpdateGear(42, gear);
 
-        Assert.Equal(404, result.StatusCode);
+        Assert.IsType<NotFoundResult>(result);
       }
     }
 
@@ -183,9 +184,9 @@ namespace ClimbingGearBackend.Tests
       {
         var controller = new GearController(context);
 
-        var result = await controller.DeleteGear(1) as NoContentResult;
+        var result = await controller.DeleteGear(1);
 
-        Assert.Equal(204, result.StatusCode);
+        Assert.IsType<NoContentResult>(result);
 
         List<Gear> gearList = context.Gear.ToList();
         Assert.Equal(2, gearList.Count);
@@ -199,9 +200,9 @@ namespace ClimbingGearBackend.Tests
       {
         var controller = new GearController(context);
 
-        var result = await controller.DeleteGear(42) as NotFoundResult;
+        var result = await controller.DeleteGear(42);
 
-        Assert.Equal(404, result.StatusCode);
+        Assert.IsType<NotFoundResult>(result);
       }
     }
   }
