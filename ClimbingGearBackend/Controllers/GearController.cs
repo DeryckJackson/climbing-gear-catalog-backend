@@ -44,7 +44,6 @@ namespace ClimbingGearBackend.Controllers
         }
 
         // PUT: api/Gear/5
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateGear(long id, GearDTO gearDTO)
         {
@@ -66,7 +65,7 @@ namespace ClimbingGearBackend.Controllers
             gear.LengthMM = gearDTO.LengthMM;
             gear.WidthMM = gearDTO.WidthMM;
             gear.DepthMM = gearDTO.DepthMM;
-            gear.Locking = gear.Locking;
+            gear.Locking = gearDTO.Locking;
 
             try
             {
@@ -81,7 +80,6 @@ namespace ClimbingGearBackend.Controllers
         }
 
         // POST: api/Gear
-        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
         public async Task<ActionResult<GearDTO>> CreateGear(GearDTO gearDTO)
         {
