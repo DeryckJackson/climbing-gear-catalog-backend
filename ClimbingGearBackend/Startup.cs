@@ -1,11 +1,13 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using ClimbingGearBackend.Models;
+using ClimbingGearBackend.Data;
 
 namespace ClimbingGearBackend
 {
@@ -22,12 +24,26 @@ namespace ClimbingGearBackend
     public void ConfigureServices(IServiceCollection services)
     {
       services.AddDbContext<ClimbingGearContext>(opt =>
-        opt.UseInMemoryDatabase("ClimbingGear"));
+        opt.UseNpgsql(Configuration.GetConnectionString("ClimbingGearContext")));
+
+      services.AddDbContext<ApplicationDbContext>(opt =>
+        opt.UseNpgsql(Configuration.GetConnectionString("UserDbContext")));
+
       services.AddControllers();
       services.AddSwaggerGen(c =>
       {
         c.SwaggerDoc("v1", new OpenApiInfo { Title = "ClimbingGearBackend", Version = "v1" });
       });
+
+      services.AddDatabaseDeveloperPageExceptionFilter();
+
+      services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
+        .AddEntityFrameworkStores<ApplicationDbContext>();
+
+      services.AddIdentityServer()
+        .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+
+      services.AddAuthentication().AddIdentityServerJwt();
     }
 
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -38,12 +54,15 @@ namespace ClimbingGearBackend
         app.UseDeveloperExceptionPage();
         app.UseSwagger();
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ClimbingGearBackend v1"));
+        app.UseMigrationsEndPoint();
       }
 
       app.UseHttpsRedirection();
 
       app.UseRouting();
 
+      app.UseAuthentication();
+      app.UseIdentityServer();
       app.UseAuthorization();
 
       app.UseEndpoints(endpoints =>
