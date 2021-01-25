@@ -10,5 +10,6 @@ namespace ClimbingGearBackend.Models
     }
 
     public DbSet<Gear> Gear { get; set; }
+    public DbSet<UserGear> UserGear { get; set; }
   }
 }
