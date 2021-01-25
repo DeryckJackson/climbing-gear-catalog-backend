@@ -4,7 +4,7 @@ namespace ClimbingGearBackend.Models
   {
     public long UserGearId { get; set; }
     public long GearId { get; set; }
-    public long UserId { get; set; }
+    public string UserId { get; set; }
     public int Quantity { get; set; }
     public Gear Gear { get; set; }
   }

@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace ClimbingGearBackend.Migrations.ClimbingGear
+namespace ClimbingGearBackend.Migrations
 {
     public partial class Initial : Migration
     {
@@ -27,10 +27,39 @@ namespace ClimbingGearBackend.Migrations.ClimbingGear
                 {
                     table.PrimaryKey("PK_Gear", x => x.Id);
                 });
+
+            migrationBuilder.CreateTable(
+                name: "UserGear",
+                columns: table => new
+                {
+                    UserGearId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    GearId = table.Column<long>(type: "bigint", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: true),
+                    Quantity = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserGear", x => x.UserGearId);
+                    table.ForeignKey(
+                        name: "FK_UserGear_Gear_GearId",
+                        column: x => x.GearId,
+                        principalTable: "Gear",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserGear_GearId",
+                table: "UserGear",
+                column: "GearId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "UserGear");
+
             migrationBuilder.DropTable(
                 name: "Gear");
         }

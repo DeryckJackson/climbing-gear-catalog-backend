@@ -2,15 +2,17 @@
 using ClimbingGearBackend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace ClimbingGearBackend.Migrations.ClimbingGear
+namespace ClimbingGearBackend.Migrations
 {
     [DbContext(typeof(ClimbingGearContext))]
-    partial class ClimbingGearContextModelSnapshot : ModelSnapshot
+    [Migration("20210125222810_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -70,8 +72,8 @@ namespace ClimbingGearBackend.Migrations.ClimbingGear
                     b.Property<int>("Quantity")
                         .HasColumnType("integer");
 
-                    b.Property<long>("UserId")
-                        .HasColumnType("bigint");
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
 
                     b.HasKey("UserGearId");
 

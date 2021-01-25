@@ -20,10 +20,9 @@ namespace ClimbingGearBackend.Controllers
 
     // GET: api/UserGear
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<UserGearDTO>>> GetUserGear(long userId)
+    public async Task<ActionResult<IEnumerable<UserGearDTO>>> GetUserGear()
     {
       var userGear = await _context.UserGear
-        .Where(x => x.UserId == userId)
         .Include(x => x.Gear)
         .ToListAsync();
 
@@ -85,7 +84,7 @@ namespace ClimbingGearBackend.Controllers
 
     // POST: api/UserGear
     [HttpPost]
-    public async Task<IActionResult> CreateUserGear(long gearId, long userId)
+    public async Task<IActionResult> CreateUserGear(long gearId, string userId)
     {
       UserGear userGear = new UserGear
       {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace ClimbingGearBackend.Migrations
+namespace ClimbingGearBackend.Migrations.ApplicationDb
 {
     public partial class Initial : Migration
     {
