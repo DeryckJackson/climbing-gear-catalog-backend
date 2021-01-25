@@ -101,9 +101,9 @@ namespace ClimbingGearBackend.Controllers
 
     // DELETE: api/UserGear/5
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUserGear(long userGearId)
+    public async Task<IActionResult> DeleteUserGear(long id)
     {
-      var userGear = await _context.UserGear.FindAsync(userGearId);
+      var userGear = await _context.UserGear.FindAsync(id);
       if (userGear == null)
       {
         return NotFound();
