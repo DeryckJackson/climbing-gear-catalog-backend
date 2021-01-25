@@ -53,14 +53,14 @@ namespace ClimbingGearBackend.Controllers
 
     // PUT: api/UserGear/5
     [HttpPut("{id}")]
-    public async Task<IActionResult> UpdateGear(long userGearId, UserGear putUserGear)
+    public async Task<IActionResult> UpdateGear(long id, UserGear putUserGear)
     {
-      if (userGearId != putUserGear.UserGearId)
+      if (id != putUserGear.UserGearId)
       {
         return BadRequest();
       }
 
-      var userGear = await _context.UserGear.FindAsync(userGearId);
+      var userGear = await _context.UserGear.FindAsync(id);
       if (userGear == null)
       {
         return NotFound();
@@ -68,13 +68,13 @@ namespace ClimbingGearBackend.Controllers
 
       userGear.GearId = putUserGear.GearId;
       userGear.UserId = putUserGear.UserId;
-
+      userGear.Quantity = putUserGear.Quantity;
 
       try
       {
         await _context.SaveChangesAsync();
       }
-      catch (DbUpdateConcurrencyException) when (!UserGearExists(userGearId))
+      catch (DbUpdateConcurrencyException) when (!UserGearExists(id))
       {
         return NotFound();
       }
