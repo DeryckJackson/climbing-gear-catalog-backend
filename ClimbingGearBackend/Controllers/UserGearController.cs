@@ -37,11 +37,11 @@ namespace ClimbingGearBackend.Controllers
 
     // GET: api/UserGear/5
     [HttpGet("{id}")]
-    public async Task<ActionResult<UserGearDTO>> GetSingleUserGear(long userGearId)
+    public async Task<ActionResult<UserGearDTO>> GetUserGear(long id)
     {
       var userGear = await _context.UserGear
         .Include(x => x.Gear)
-        .FirstOrDefaultAsync(x => x.UserGearId == userGearId);
+        .FirstOrDefaultAsync(x => x.UserGearId == id);
 
       if (userGear == null)
       {
@@ -84,12 +84,13 @@ namespace ClimbingGearBackend.Controllers
 
     // POST: api/UserGear
     [HttpPost]
-    public async Task<IActionResult> CreateUserGear(long gearId, string userId)
+    public async Task<IActionResult> CreateUserGear(UserGear postGear)
     {
       UserGear userGear = new UserGear
       {
-        GearId = gearId,
-        UserId = userId,
+        GearId = postGear.GearId,
+        UserId = postGear.UserId,
+        Quantity = postGear.Quantity
       };
 
       _context.UserGear.Add(userGear);
