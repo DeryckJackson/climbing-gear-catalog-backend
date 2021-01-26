@@ -7,7 +7,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using ClimbingGearBackend.Models;
-using ClimbingGearBackend.Data;
 
 namespace ClimbingGearBackend
 {
@@ -26,9 +25,6 @@ namespace ClimbingGearBackend
       services.AddDbContext<ClimbingGearContext>(opt =>
         opt.UseNpgsql(Configuration.GetConnectionString("ClimbingGearContext")));
 
-      services.AddDbContext<ApplicationDbContext>(opt =>
-        opt.UseNpgsql(Configuration.GetConnectionString("UserDbContext")));
-
       services.AddControllers();
       services.AddSwaggerGen(c =>
       {
@@ -37,11 +33,11 @@ namespace ClimbingGearBackend
 
       services.AddDatabaseDeveloperPageExceptionFilter();
 
-      services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-        .AddEntityFrameworkStores<ApplicationDbContext>();
+      services.AddDefaultIdentity<User>(options => options.SignIn.RequireConfirmedAccount = true)
+        .AddEntityFrameworkStores<ClimbingGearContext>();
 
       services.AddIdentityServer()
-        .AddApiAuthorization<ApplicationUser, ApplicationDbContext>();
+        .AddApiAuthorization<User, ClimbingGearContext>();
 
       services.AddAuthentication().AddIdentityServerJwt();
     }
