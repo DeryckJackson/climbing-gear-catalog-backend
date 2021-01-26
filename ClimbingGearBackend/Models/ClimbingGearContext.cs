@@ -1,11 +1,14 @@
 using Microsoft.EntityFrameworkCore;
+using IdentityServer4.EntityFramework.Options;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.Extensions.Options;
 
 namespace ClimbingGearBackend.Models
 {
-  public class ClimbingGearContext : DbContext
+  public class ClimbingGearContext : ApiAuthorizationDbContext<User>
   {
-    public ClimbingGearContext(DbContextOptions<ClimbingGearContext> options)
-      : base(options)
+    public ClimbingGearContext(DbContextOptions<ClimbingGearContext> options,
+    IOptions<OperationalStoreOptions> operationalStoreOptions) : base(options, operationalStoreOptions)
     {
     }
 

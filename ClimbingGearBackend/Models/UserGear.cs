@@ -3,10 +3,12 @@ namespace ClimbingGearBackend.Models
   public class UserGear
   {
     public long UserGearId { get; set; }
-    public long GearId { get; set; }
-    public long UserId { get; set; }
     public int Quantity { get; set; }
+    public long GearId { get; set; }
     public Gear Gear { get; set; }
+    public string UserId { get; set; }
+    public User User { get; set; }
+
   }
 
   public class UserGearDTO
