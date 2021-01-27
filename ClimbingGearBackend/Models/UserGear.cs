@@ -8,7 +8,6 @@ namespace ClimbingGearBackend.Models
     public Gear Gear { get; set; }
     public string UserId { get; set; }
     public User User { get; set; }
-
   }
 
   public class UserGearDTO

@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClimbingGearBackend.Models;
+using ClimbingGearBackend.Infrastucture;
 
 namespace ClimbingGearBackend.Controllers
 {
@@ -11,34 +12,32 @@ namespace ClimbingGearBackend.Controllers
   [ApiController]
   public class GearController : ControllerBase
   {
-    private readonly ClimbingGearContext _context;
+    private readonly EFGearRepository _repository;
 
-    public GearController(ClimbingGearContext context)
+    public GearController(EFGearRepository repository)
     {
-      _context = context;
+      _repository = repository;
     }
 
     // GET: api/Gear
     [HttpGet]
     public async Task<ActionResult<IEnumerable<GearDTO>>> GetGear()
     {
-      return await _context.Gear
-        .Select(x => GearToDTO(x))
-        .ToListAsync();
+      return await _repository.DTOListAsync();
     }
 
     // GET: api/Gear/5
     [HttpGet("{id}")]
     public async Task<ActionResult<GearDTO>> GetGear(long id)
     {
-      var gear = await _context.Gear.FindAsync(id);
+      var gear = await _repository.GetByIdAsync(id);
 
       if (gear == null)
       {
         return NotFound();
       }
 
-      return GearToDTO(gear);
+      return Gear.GearToDTO(gear);
     }
 
     // PUT: api/Gear/5
@@ -50,7 +49,7 @@ namespace ClimbingGearBackend.Controllers
         return BadRequest();
       }
 
-      var gear = await _context.Gear.FindAsync(id);
+      var gear = await _repository.GetByIdAsync(id);
       if (gear == null)
       {
         return NotFound();
@@ -67,9 +66,9 @@ namespace ClimbingGearBackend.Controllers
 
       try
       {
-        await _context.SaveChangesAsync();
+        await _repository.SaveChangesAsync();
       }
-      catch (DbUpdateConcurrencyException) when (!GearExists(id))
+      catch (DbUpdateConcurrencyException) when (!_repository.Exists(id))
       {
         return NotFound();
       }
@@ -93,45 +92,24 @@ namespace ClimbingGearBackend.Controllers
         Locking = gearDTO.Locking,
       };
 
-      _context.Gear.Add(gear);
-      await _context.SaveChangesAsync();
+      await _repository.AddAsync(gear);
 
-      return CreatedAtAction(nameof(GetGear), new { id = gear.Id }, GearToDTO(gear));
+      return CreatedAtAction(nameof(GetGear), new { id = gear.Id }, Gear.GearToDTO(gear));
     }
 
     // DELETE: api/Gear/5
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteGear(long id)
     {
-      var gear = await _context.Gear.FindAsync(id);
+      var gear = await _repository.GetByIdAsync(id);
       if (gear == null)
       {
         return NotFound();
       }
 
-      _context.Gear.Remove(gear);
-      await _context.SaveChangesAsync();
+      await _repository.DeleteAsync(gear);
 
       return NoContent();
     }
-
-    private bool GearExists(long id)
-    {
-      return _context.Gear.Any(e => e.Id == id);
-    }
-
-    private static GearDTO GearToDTO(Gear gear) =>
-        new GearDTO
-        {
-          Id = gear.Id,
-          Name = gear.Name,
-          Description = gear.Description,
-          Brand = gear.Brand,
-          WeightGrams = gear.WeightGrams,
-          LengthMM = gear.LengthMM,
-          WidthMM = gear.WidthMM,
-          DepthMM = gear.DepthMM,
-          Locking = gear.Locking,
-        };
   }
 }

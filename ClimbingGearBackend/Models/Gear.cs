@@ -12,6 +12,22 @@ namespace ClimbingGearBackend.Models
     public int DepthMM { get; set; }
     public bool Locking { get; set; }
     public string Secret { get; set; }
+
+    public static GearDTO GearToDTO(Gear gear)
+    {
+      return new GearDTO
+      {
+        Id = gear.Id,
+        Name = gear.Name,
+        Description = gear.Description,
+        Brand = gear.Brand,
+        WeightGrams = gear.WeightGrams,
+        LengthMM = gear.LengthMM,
+        WidthMM = gear.WidthMM,
+        DepthMM = gear.DepthMM,
+        Locking = gear.Locking,
+      };
+    }
   }
 
   public class GearDTO

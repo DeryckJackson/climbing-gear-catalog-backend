@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClimbingGearBackend.Models;
+using ClimbingGearBackend.Infrastucture;
 
 namespace ClimbingGearBackend.Controllers
 {

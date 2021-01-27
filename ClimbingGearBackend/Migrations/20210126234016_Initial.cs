@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore.Migrations;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
-namespace ClimbingGearBackend.Migrations.ApplicationDb
+namespace ClimbingGearBackend.Migrations
 {
     public partial class Initial : Migration
     {
@@ -64,6 +64,27 @@ namespace ClimbingGearBackend.Migrations.ApplicationDb
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_DeviceCodes", x => x.UserCode);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Gear",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    Brand = table.Column<string>(type: "text", nullable: true),
+                    WeightGrams = table.Column<int>(type: "integer", nullable: false),
+                    LengthMM = table.Column<int>(type: "integer", nullable: false),
+                    WidthMM = table.Column<int>(type: "integer", nullable: false),
+                    DepthMM = table.Column<int>(type: "integer", nullable: false),
+                    Locking = table.Column<bool>(type: "boolean", nullable: false),
+                    Secret = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Gear", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -192,6 +213,33 @@ namespace ClimbingGearBackend.Migrations.ApplicationDb
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "UserGear",
+                columns: table => new
+                {
+                    UserGearId = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Quantity = table.Column<int>(type: "integer", nullable: false),
+                    GearId = table.Column<long>(type: "bigint", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserGear", x => x.UserGearId);
+                    table.ForeignKey(
+                        name: "FK_UserGear_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_UserGear_Gear_GearId",
+                        column: x => x.GearId,
+                        principalTable: "Gear",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
                 table: "AspNetRoleClaims",
@@ -254,6 +302,16 @@ namespace ClimbingGearBackend.Migrations.ApplicationDb
                 name: "IX_PersistedGrants_SubjectId_SessionId_Type",
                 table: "PersistedGrants",
                 columns: new[] { "SubjectId", "SessionId", "Type" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserGear_GearId",
+                table: "UserGear",
+                column: "GearId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserGear_UserId",
+                table: "UserGear",
+                column: "UserId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -280,10 +338,16 @@ namespace ClimbingGearBackend.Migrations.ApplicationDb
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
+                name: "UserGear");
+
+            migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Gear");
         }
     }
 }
