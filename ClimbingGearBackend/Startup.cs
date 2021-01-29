@@ -8,6 +8,7 @@ using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
 using ClimbingGearBackend.Infrastucture;
 using ClimbingGearBackend.Models;
+using ClimbingGearBackend.Interfaces;
 
 namespace ClimbingGearBackend
 {
@@ -25,6 +26,8 @@ namespace ClimbingGearBackend
     {
       services.AddDbContext<ClimbingGearContext>(opt =>
         opt.UseNpgsql(Configuration.GetConnectionString("ClimbingGearContext")));
+
+      services.AddScoped<IGearRepository, EFGearRepository>();
 
       services.AddControllers();
       services.AddSwaggerGen(c =>

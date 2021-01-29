@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ClimbingGearBackend.Models;
-using ClimbingGearBackend.Infrastucture;
+using ClimbingGearBackend.Interfaces;
 
 namespace ClimbingGearBackend.Controllers
 {
@@ -12,9 +12,9 @@ namespace ClimbingGearBackend.Controllers
   [ApiController]
   public class GearController : ControllerBase
   {
-    private readonly EFGearRepository _repository;
+    private readonly IGearRepository _repository;
 
-    public GearController(EFGearRepository repository)
+    public GearController(IGearRepository repository)
     {
       _repository = repository;
     }
