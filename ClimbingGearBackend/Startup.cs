@@ -28,6 +28,7 @@ namespace ClimbingGearBackend
         opt.UseNpgsql(Configuration.GetConnectionString("ClimbingGearContext")));
 
       services.AddScoped<IGearRepository, EFGearRepository>();
+      services.AddScoped<IUserGearRepository, EFUserGearRepository>();
 
       services.AddControllers();
       services.AddSwaggerGen(c =>

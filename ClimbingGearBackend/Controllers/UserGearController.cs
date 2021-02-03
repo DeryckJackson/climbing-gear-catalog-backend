@@ -1,32 +1,31 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using ClimbingGearBackend.Models;
-using ClimbingGearBackend.Infrastucture;
+using ClimbingGearBackend.Interfaces;
 
 namespace ClimbingGearBackend.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  //TODO:#1 Enable Authorization and have DB querys only return logged in UserGear
+  //TODO:#1 Enable Authorization and have DB querys only return logged in User Gear
   public class UserGearController : ControllerBase
   {
-    private readonly ClimbingGearContext _context;
+    private readonly IUserGearRepository _repository;
 
-    public UserGearController(ClimbingGearContext context)
+    public UserGearController(IUserGearRepository repository)
     {
-      _context = context;
+      _repository = repository;
     }
 
     // GET: api/UserGear
     [HttpGet]
     public async Task<ActionResult<IEnumerable<UserGearDTO>>> GetUserGear()
     {
-      var userGear = await _context.UserGear
-        .Include(x => x.Gear)
-        .ToListAsync();
+      var currentUser = this.User;
+      var userGear = await _repository.ListAsync(currentUser);
 
       var userGearDTOList = new List<UserGearDTO>();
       foreach (UserGear gear in userGear)
@@ -41,9 +40,7 @@ namespace ClimbingGearBackend.Controllers
     [HttpGet("{id}")]
     public async Task<ActionResult<UserGearDTO>> GetUserGear(long id)
     {
-      var userGear = await _context.UserGear
-        .Include(x => x.Gear)
-        .FirstOrDefaultAsync(x => x.UserGearId == id);
+      var userGear = await _repository.GetByIdAsync(id);
 
       if (userGear == null)
       {
@@ -62,7 +59,7 @@ namespace ClimbingGearBackend.Controllers
         return BadRequest();
       }
 
-      var userGear = await _context.UserGear.FindAsync(id);
+      var userGear = await _repository.GetByIdAsync(id);
       if (userGear == null)
       {
         return NotFound();
@@ -74,7 +71,7 @@ namespace ClimbingGearBackend.Controllers
 
       try
       {
-        await _context.SaveChangesAsync();
+        await _repository.SaveChangesAsync();
       }
       catch (DbUpdateConcurrencyException) when (!UserGearExists(id))
       {
@@ -86,7 +83,7 @@ namespace ClimbingGearBackend.Controllers
 
     // POST: api/UserGear
     [HttpPost]
-    public async Task<IActionResult> CreateUserGear(UserGear postGear)
+    public async Task<ActionResult<UserGear>> CreateUserGear(UserGear postGear)
     {
       UserGear userGear = new UserGear
       {
@@ -95,8 +92,7 @@ namespace ClimbingGearBackend.Controllers
         Quantity = postGear.Quantity
       };
 
-      _context.UserGear.Add(userGear);
-      await _context.SaveChangesAsync();
+      await _repository.AddAsync(userGear);
 
       return CreatedAtAction(nameof(GetUserGear), new { id = userGear.UserGearId }, userGear);
     }
@@ -105,21 +101,20 @@ namespace ClimbingGearBackend.Controllers
     [HttpDelete("{id}")]
     public async Task<IActionResult> DeleteUserGear(long id)
     {
-      var userGear = await _context.UserGear.FindAsync(id);
+      var userGear = await _repository.GetByIdAsync(id);
       if (userGear == null)
       {
         return NotFound();
       }
 
-      _context.UserGear.Remove(userGear);
-      await _context.SaveChangesAsync();
+      await _repository.DeleteAsync(userGear);
 
       return NoContent();
     }
 
     private bool UserGearExists(long userGearId)
     {
-      return _context.UserGear.Any(e => e.UserGearId == userGearId);
+      return _repository.Exists(userGearId);
     }
 
     private static UserGearDTO UserGearToDTO(UserGear userGear)
