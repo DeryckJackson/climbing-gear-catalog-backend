@@ -214,7 +214,7 @@ namespace ClimbingGearBackend.Tests
     }
 
     [Fact]
-    public async Task DeleteGearWithIdAndUserGear_ShouldReturnNoContent()
+    public async Task DeleteUserGearWithIdAndUserGear_ShouldReturnNoContent()
     {
       var mockRepo = new Mock<IUserGearRepository>();
       mockRepo.Setup(repo => repo.GetByIdAsync(It.IsAny<long>()).Result)
@@ -228,12 +228,12 @@ namespace ClimbingGearBackend.Tests
     }
 
     [Fact]
-    public async Task DeleteGearWithAnInvalidId_ShouldReturnNotFound()
+    public async Task DeleteUserGearWithAnInvalidId_ShouldReturnNotFound()
     {
-      var mockRepo = new Mock<IGearRepository>();
-      var controller = new GearController(mockRepo.Object);
+      var mockRepo = new Mock<IUserGearRepository>();
+      var controller = new UserGearController(mockRepo.Object);
 
-      var result = await controller.DeleteGear(42);
+      var result = await controller.DeleteUserGear(42);
 
       Assert.IsType<NotFoundResult>(result);
     }
