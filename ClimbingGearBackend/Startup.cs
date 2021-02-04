@@ -6,7 +6,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Microsoft.EntityFrameworkCore;
+using ClimbingGearBackend.Infrastucture;
 using ClimbingGearBackend.Models;
+using ClimbingGearBackend.Interfaces;
 
 namespace ClimbingGearBackend
 {
@@ -25,6 +27,8 @@ namespace ClimbingGearBackend
       services.AddDbContext<ClimbingGearContext>(opt =>
         opt.UseNpgsql(Configuration.GetConnectionString("ClimbingGearContext")));
 
+      services.AddScoped<IGearRepository, EFGearRepository>();
+
       services.AddControllers();
       services.AddSwaggerGen(c =>
       {
@@ -42,6 +46,12 @@ namespace ClimbingGearBackend
       services.AddAuthentication().AddIdentityServerJwt();
     }
 
+    protected virtual void ConfigureDatabaseServices(IServiceCollection services)
+    {
+      services.AddDbContext<ClimbingGearContext>(opt =>
+        opt.UseNpgsql(Configuration.GetConnectionString("ClimbingGearContext")));
+    }
+
     // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
     public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
     {
@@ -52,14 +62,20 @@ namespace ClimbingGearBackend
         app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "ClimbingGearBackend v1"));
         app.UseMigrationsEndPoint();
       }
+      else
+      {
+        app.UseExceptionHandler("/Error");
+        // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+        app.UseHsts();
+      }
 
       app.UseHttpsRedirection();
 
       app.UseRouting();
 
       app.UseAuthentication();
-      app.UseIdentityServer();
       app.UseAuthorization();
+      app.UseIdentityServer();
 
       app.UseEndpoints(endpoints =>
       {
