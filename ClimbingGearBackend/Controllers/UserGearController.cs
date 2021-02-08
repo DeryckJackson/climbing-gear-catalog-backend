@@ -10,7 +10,7 @@ namespace ClimbingGearBackend.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  //TODO:#1 Enable Authorization and have DB querys only return logged in User Gear
+  // TODO(#5): Enable Authorization and have DB querys only return logged in User's Gear
   public class UserGearController : ControllerBase
   {
     private readonly IUserGearRepository _repository;

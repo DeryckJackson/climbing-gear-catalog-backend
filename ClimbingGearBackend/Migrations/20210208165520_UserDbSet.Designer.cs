@@ -3,15 +3,17 @@ using System;
 using ClimbingGearBackend.Infrastucture;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace ClimbingGearBackend.Migrations
 {
     [DbContext(typeof(ClimbingGearContext))]
-    partial class ClimbingGearContextModelSnapshot : ModelSnapshot
+    [Migration("20210208165520_UserDbSet")]
+    partial class UserDbSet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

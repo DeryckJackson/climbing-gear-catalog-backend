@@ -1,6 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using ClimbingGearBackend.Infrastucture;
 using ClimbingGearBackend.Models;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +8,7 @@ using Xunit;
 
 namespace ClimbingGearBackend.Tests
 {
-  /* TODO: Issue #7 I can't get this DbContext test working with Xunit, There's something about the operationalStoreOptions it doesn't like. Keeps throwing "Parameters don't have matching fixture data" errors. So until I can figure out why the extra options I need to get my Database working with the Api options the Repositories will remain untested. Link to Xunit Collections:
+  /* TODO(#7): I can't get this DbContext test working with Xunit, There's something about the operationalStoreOptions it doesn't like. Keeps throwing "Parameters don't have matching fixture data" errors. So until I can figure out why the extra options I need to get my Database working with the Api options the Repositories will remain untested. Link to Xunit Collections:
   
   https://xunit.net/docs/shared-context#collection-fixture
   */
