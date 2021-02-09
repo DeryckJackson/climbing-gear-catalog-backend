@@ -6,9 +6,9 @@
 
 Climbing gear app for organizing and keeping track of users climbing gear. Backend uses ASP NET core 5.1.
 
-## Component Diagram
+## Database Diagram
 
-
+![DB Diagram](DBDiagram.png)
 
 ## User Stories
 

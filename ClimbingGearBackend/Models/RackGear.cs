@@ -1,18 +1,20 @@
+using Microsoft.EntityFrameworkCore;
+
 namespace ClimbingGearBackend.Models
 {
-  public class UserGear
+  [Keyless]
+  public class RackGear
   {
-    public long Id { get; set; }
-    public int Quantity { get; set; }
+    public long RackId { get; set; }
+    public Rack Rack { get; set; }
     public long GearId { get; set; }
     public Gear Gear { get; set; }
-    public string UserId { get; set; }
-    public User User { get; set; }
+    public int Quantity { get; set; }
   }
 
-  public class UserGearDTO
+  public class RackGearDTO
   {
-    public long Id { get; set; }
+    public long RackId { get; set; }
     public long GearId { get; set; }
     public string Name { get; set; }
     public int Quantity { get; set; }

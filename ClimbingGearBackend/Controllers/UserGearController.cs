@@ -10,7 +10,7 @@ namespace ClimbingGearBackend.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  // TODO(#5): Enable Authorization and have DB querys only return logged in User's Gear
+  // TODO: #5 Enable Authorization and have DB querys only return logged in User's Gear
   public class UserGearController : ControllerBase
   {
     private readonly IUserGearRepository _repository;
@@ -54,7 +54,7 @@ namespace ClimbingGearBackend.Controllers
     [HttpPut("{id}")]
     public async Task<IActionResult> UpdateGear(long id, UserGear putUserGear)
     {
-      if (id != putUserGear.UserGearId)
+      if (id != putUserGear.Id)
       {
         return BadRequest();
       }
@@ -94,7 +94,7 @@ namespace ClimbingGearBackend.Controllers
 
       await _repository.AddAsync(userGear);
 
-      return CreatedAtAction(nameof(GetUserGear), new { id = userGear.UserGearId }, userGear);
+      return CreatedAtAction(nameof(GetUserGear), new { id = userGear.Id }, userGear);
     }
 
     // DELETE: api/UserGear/5
@@ -121,7 +121,7 @@ namespace ClimbingGearBackend.Controllers
     {
       return new UserGearDTO
       {
-        UserGearId = userGear.UserGearId,
+        Id = userGear.Id,
         GearId = userGear.Gear.Id,
         Name = userGear.Gear.Name,
         Quantity = userGear.Quantity,

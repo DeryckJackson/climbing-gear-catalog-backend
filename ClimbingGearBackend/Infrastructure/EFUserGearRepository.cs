@@ -23,7 +23,7 @@ namespace ClimbingGearBackend.Infrastucture
 
     public bool Exists(long id)
     {
-      return _dbContext.UserGear.Any(e => e.UserGearId == id);
+      return _dbContext.UserGear.Any(e => e.Id == id);
     }
 
     public Task AddAsync(UserGear userGear)
@@ -48,7 +48,7 @@ namespace ClimbingGearBackend.Infrastucture
 
     public Task<UserGear> GetByIdAsync(long id)
     {
-      return _dbContext.UserGear.FirstOrDefaultAsync(x => x.UserGearId == id);
+      return _dbContext.UserGear.FirstOrDefaultAsync(x => x.Id == id);
     }
 
     public Task SaveChangesAsync()

@@ -18,5 +18,8 @@ namespace ClimbingGearBackend.Infrastucture
     public DbSet<Gear> Gear { get; set; }
     public DbSet<UserGear> UserGear { get; set; }
     public DbSet<User> User { get; set; }
+    public DbSet<Rack> Rack { get; set; }
+    public DbSet<RackGear> RackGear { get; set; }
+    public DbSet<RackUsers> RackUsers { get; set; }
   }
 }
