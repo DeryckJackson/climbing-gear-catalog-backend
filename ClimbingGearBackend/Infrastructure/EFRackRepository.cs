@@ -31,13 +31,9 @@ namespace ClimbingGearBackend.Interfaces
       return _dbContext.SaveChangesAsync();
     }
 
-    public Task AddRackUserAsync(ClaimsPrincipal currentUser, long rackId)
+    public Task AddRackUserAsync(ClaimsPrincipal currentUser, RackUsers rackUser)
     {
-      var rackUser = new RackUsers
-      {
-        RackId = rackId,
-        UserId = _userManager.GetUserId(currentUser)
-      };
+      rackUser.UserId = _userManager.GetUserId(currentUser);
 
       _dbContext.RackUsers.Add(rackUser);
       return _dbContext.SaveChangesAsync();
@@ -61,6 +57,11 @@ namespace ClimbingGearBackend.Interfaces
       return _dbContext.SaveChangesAsync();
     }
 
+    public bool Exists(long id)
+    {
+      return _dbContext.Rack.Any(e => e.Id == id);
+    }
+
     public Task<Rack> GetRackByIdAsync(long id)
     {
       return _dbContext.Rack.FirstOrDefaultAsync(x => x.Id == id);
@@ -72,10 +73,11 @@ namespace ClimbingGearBackend.Interfaces
         .FirstOrDefaultAsync(x => x.RackId == rackId && x.GearId == gearId);
     }
 
-    public Task<List<RackUsers>> GetUserRacksByUserId(ClaimsPrincipal currentUser)
+    public Task<List<RackUsers>> GetUserRacksByUserIdAsync(ClaimsPrincipal currentUser)
     {
       return _dbContext.RackUsers
         .Where(x => x.UserId == _userManager.GetUserId(currentUser))
+        .Include(x => x.Rack)
         .ToListAsync();
     }
 
@@ -83,7 +85,7 @@ namespace ClimbingGearBackend.Interfaces
     {
       return _dbContext.RackGear
         .Where(x => x.RackId == rackId)
-        .Include(x => x.Gear)
+        .Include(x => x.Rack)
         .ToListAsync();
     }
 

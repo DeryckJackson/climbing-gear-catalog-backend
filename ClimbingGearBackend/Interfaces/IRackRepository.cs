@@ -9,13 +9,14 @@ namespace ClimbingGearBackend.Interfaces
   {
     Task AddRackAsync(Rack rack);
     Task AddRackGearAsync(RackGear rackGear);
-    Task AddRackUserAsync(ClaimsPrincipal currentUser, long rackId);
+    Task AddRackUserAsync(ClaimsPrincipal currentUser, RackUsers rackUser);
     Task DeleteRackAsync(Rack rack);
     Task DeleteRackGearAsync(RackGear rackGear);
     Task DeleteRackUserAsync(RackUsers rackUser);
+    bool Exists(long id);
     Task<Rack> GetRackByIdAsync(long id);
     Task<RackGear> GetRackGearByIdsAsync(long rackId, long gearId);
-    Task<List<RackUsers>> GetUserRacksByUserId(ClaimsPrincipal currentUser);
+    Task<List<RackUsers>> GetUserRacksByUserIdAsync(ClaimsPrincipal currentUser);
     Task<List<RackGear>> RackGearListAsync(long rackId);
     Task SaveChangesAsync();
   }

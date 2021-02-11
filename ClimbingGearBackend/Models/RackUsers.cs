@@ -12,7 +12,13 @@ namespace ClimbingGearBackend.Models
     public User User { get; set; }
   }
 
-  public class RackUsersDTO
+  public class UserRackDTO
+  {
+    public long RackId { get; set; }
+    public string Name { get; set; }
+  }
+
+  public class RackUsersGearDTO
   {
     public long RackId { get; set; }
     public string Name { get; set; }

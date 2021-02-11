@@ -21,11 +21,6 @@ namespace ClimbingGearBackend.Infrastucture
       _userManager = userManager;
     }
 
-    public bool Exists(long id)
-    {
-      return _dbContext.UserGear.Any(e => e.Id == id);
-    }
-
     public Task AddAsync(UserGear userGear)
     {
       _dbContext.UserGear.Add(userGear);
@@ -36,6 +31,11 @@ namespace ClimbingGearBackend.Infrastucture
     {
       _dbContext.UserGear.Remove(userGear);
       return _dbContext.SaveChangesAsync();
+    }
+
+    public bool Exists(long id)
+    {
+      return _dbContext.UserGear.Any(e => e.Id == id);
     }
 
     public Task<List<UserGear>> ListAsync(ClaimsPrincipal currentUser)
