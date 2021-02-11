@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -10,11 +9,11 @@ namespace ClimbingGearBackend.Controllers
 {
   [Route("api/[controller]")]
   [ApiController]
-  public class RackUsersController : ControllerBase
+  public class RackController : ControllerBase
   {
     private readonly IRackRepository _repository;
 
-    public RackUsersController(IRackRepository repository)
+    public RackController(IRackRepository repository)
     {
       _repository = repository;
     }
@@ -113,7 +112,7 @@ namespace ClimbingGearBackend.Controllers
     }
 
     [HttpDelete("{id}")]
-    public async Task<IActionResult> DeleteUserGear(long id)
+    public async Task<IActionResult> DeleteUserRack(long id)
     {
       var rack = await _repository.GetRackByIdAsync(id);
       if (rack == null)

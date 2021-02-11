@@ -29,6 +29,7 @@ namespace ClimbingGearBackend
 
       services.AddScoped<IGearRepository, EFGearRepository>();
       services.AddScoped<IUserGearRepository, EFUserGearRepository>();
+      services.AddScoped<IRackRepository, EFRackRepository>();
 
       services.AddControllers();
       services.AddSwaggerGen(c =>
