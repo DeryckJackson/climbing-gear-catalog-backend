@@ -46,6 +46,11 @@ namespace ClimbingGearBackend
         .AddApiAuthorization<User, ClimbingGearContext>();
 
       services.AddAuthentication().AddIdentityServerJwt();
+
+      services.AddSpaStaticFiles(configuration =>
+      {
+        configuration.RootPath = "ClientApp/build";
+      });
     }
 
     protected virtual void ConfigureDatabaseServices(IServiceCollection services)
@@ -72,6 +77,8 @@ namespace ClimbingGearBackend
       }
 
       app.UseHttpsRedirection();
+      app.UseStaticFiles();
+      app.UseSpaStaticFiles();
 
       app.UseRouting();
 
@@ -81,7 +88,20 @@ namespace ClimbingGearBackend
 
       app.UseEndpoints(endpoints =>
       {
-        endpoints.MapControllers();
+        endpoints.MapControllerRoute(
+                  name: "default",
+                  pattern: "{controller}/{action=Index}/{id?}");
+        endpoints.MapRazorPages();
+      });
+
+      app.UseSpa(spa =>
+      {
+        spa.Options.SourcePath = "ClientApp";
+
+        if (env.IsDevelopment())
+        {
+          spa.UseProxyToSpaDevelopmentServer("http://localhost:3000");
+        }
       });
     }
   }
