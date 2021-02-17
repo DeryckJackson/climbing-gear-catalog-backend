@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +6,7 @@ using ClimbingGearBackend.Interfaces;
 
 namespace ClimbingGearBackend.Controllers
 {
-  [Route("api/rack/{rackId}/[controller]")]
+  [Route("api/rack/{rackId}/gear")]
   [ApiController]
   public class RackGearController : ControllerBase
   {

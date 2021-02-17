@@ -7,7 +7,7 @@ using ClimbingGearBackend.Interfaces;
 
 namespace ClimbingGearBackend.Controllers
 {
-  [Route("api/[controller]")]
+  [Route("api/rack")]
   [ApiController]
   public class RackController : ControllerBase
   {
