@@ -108,6 +108,19 @@ namespace ClimbingGearBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Rack",
+                columns: table => new
+                {
+                    Id = table.Column<long>(type: "bigint", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Name = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Rack", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "AspNetRoleClaims",
                 columns: table => new
                 {
@@ -217,7 +230,7 @@ namespace ClimbingGearBackend.Migrations
                 name: "UserGear",
                 columns: table => new
                 {
-                    UserGearId = table.Column<long>(type: "bigint", nullable: false)
+                    Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Quantity = table.Column<int>(type: "integer", nullable: false),
                     GearId = table.Column<long>(type: "bigint", nullable: false),
@@ -225,7 +238,7 @@ namespace ClimbingGearBackend.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_UserGear", x => x.UserGearId);
+                    table.PrimaryKey("PK_UserGear", x => x.Id);
                     table.ForeignKey(
                         name: "FK_UserGear_AspNetUsers_UserId",
                         column: x => x.UserId,
@@ -236,6 +249,53 @@ namespace ClimbingGearBackend.Migrations
                         name: "FK_UserGear_Gear_GearId",
                         column: x => x.GearId,
                         principalTable: "Gear",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RackGear",
+                columns: table => new
+                {
+                    RackId = table.Column<long>(type: "bigint", nullable: false),
+                    GearId = table.Column<long>(type: "bigint", nullable: false),
+                    Quantity = table.Column<int>(type: "integer", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.ForeignKey(
+                        name: "FK_RackGear_Gear_GearId",
+                        column: x => x.GearId,
+                        principalTable: "Gear",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RackGear_Rack_RackId",
+                        column: x => x.RackId,
+                        principalTable: "Rack",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RackUsers",
+                columns: table => new
+                {
+                    RackId = table.Column<long>(type: "bigint", nullable: false),
+                    UserId = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.ForeignKey(
+                        name: "FK_RackUsers_AspNetUsers_UserId",
+                        column: x => x.UserId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                    table.ForeignKey(
+                        name: "FK_RackUsers_Rack_RackId",
+                        column: x => x.RackId,
+                        principalTable: "Rack",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -304,6 +364,26 @@ namespace ClimbingGearBackend.Migrations
                 columns: new[] { "SubjectId", "SessionId", "Type" });
 
             migrationBuilder.CreateIndex(
+                name: "IX_RackGear_GearId",
+                table: "RackGear",
+                column: "GearId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RackGear_RackId",
+                table: "RackGear",
+                column: "RackId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RackUsers_RackId",
+                table: "RackUsers",
+                column: "RackId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RackUsers_UserId",
+                table: "RackUsers",
+                column: "UserId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_UserGear_GearId",
                 table: "UserGear",
                 column: "GearId");
@@ -338,10 +418,19 @@ namespace ClimbingGearBackend.Migrations
                 name: "PersistedGrants");
 
             migrationBuilder.DropTable(
+                name: "RackGear");
+
+            migrationBuilder.DropTable(
+                name: "RackUsers");
+
+            migrationBuilder.DropTable(
                 name: "UserGear");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
+
+            migrationBuilder.DropTable(
+                name: "Rack");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");

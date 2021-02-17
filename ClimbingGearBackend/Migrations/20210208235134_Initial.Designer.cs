@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace ClimbingGearBackend.Migrations
 {
     [DbContext(typeof(ClimbingGearContext))]
-    [Migration("20210208165520_UserDbSet")]
-    partial class UserDbSet
+    [Migration("20210208235134_Initial")]
+    partial class Initial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -58,6 +58,54 @@ namespace ClimbingGearBackend.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Gear");
+                });
+
+            modelBuilder.Entity("ClimbingGearBackend.Models.Rack", b =>
+                {
+                    b.Property<long>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bigint")
+                        .UseIdentityByDefaultColumn();
+
+                    b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Rack");
+                });
+
+            modelBuilder.Entity("ClimbingGearBackend.Models.RackGear", b =>
+                {
+                    b.Property<long>("GearId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("Quantity")
+                        .HasColumnType("integer");
+
+                    b.Property<long>("RackId")
+                        .HasColumnType("bigint");
+
+                    b.HasIndex("GearId");
+
+                    b.HasIndex("RackId");
+
+                    b.ToTable("RackGear");
+                });
+
+            modelBuilder.Entity("ClimbingGearBackend.Models.RackUsers", b =>
+                {
+                    b.Property<long>("RackId")
+                        .HasColumnType("bigint");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("text");
+
+                    b.HasIndex("RackId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("RackUsers");
                 });
 
             modelBuilder.Entity("ClimbingGearBackend.Models.User", b =>
@@ -126,7 +174,7 @@ namespace ClimbingGearBackend.Migrations
 
             modelBuilder.Entity("ClimbingGearBackend.Models.UserGear", b =>
                 {
-                    b.Property<long>("UserGearId")
+                    b.Property<long>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bigint")
                         .UseIdentityByDefaultColumn();
@@ -140,7 +188,7 @@ namespace ClimbingGearBackend.Migrations
                     b.Property<string>("UserId")
                         .HasColumnType("text");
 
-                    b.HasKey("UserGearId");
+                    b.HasKey("Id");
 
                     b.HasIndex("GearId");
 
@@ -384,6 +432,42 @@ namespace ClimbingGearBackend.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("ClimbingGearBackend.Models.RackGear", b =>
+                {
+                    b.HasOne("ClimbingGearBackend.Models.Gear", "Gear")
+                        .WithMany()
+                        .HasForeignKey("GearId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClimbingGearBackend.Models.Rack", "Rack")
+                        .WithMany()
+                        .HasForeignKey("RackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Gear");
+
+                    b.Navigation("Rack");
+                });
+
+            modelBuilder.Entity("ClimbingGearBackend.Models.RackUsers", b =>
+                {
+                    b.HasOne("ClimbingGearBackend.Models.Rack", "Rack")
+                        .WithMany()
+                        .HasForeignKey("RackId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("ClimbingGearBackend.Models.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
+
+                    b.Navigation("Rack");
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClimbingGearBackend.Models.UserGear", b =>

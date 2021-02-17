@@ -18,7 +18,7 @@ namespace ClimbingGearBackend.Tests
       {
         new UserGear
         {
-          UserGearId = 1,
+          Id = 1,
           GearId = 1,
           Quantity = 1,
           Gear = new Gear
@@ -31,7 +31,7 @@ namespace ClimbingGearBackend.Tests
         },
         new UserGear
         {
-          UserGearId = 2,
+          Id = 2,
           GearId = 2,
           Quantity = 2,
           Gear = new Gear
@@ -43,7 +43,7 @@ namespace ClimbingGearBackend.Tests
         },
         new UserGear
         {
-          UserGearId = 3,
+          Id = 3,
           GearId = 3,
           Quantity = 3,
           Gear = new Gear
@@ -68,7 +68,7 @@ namespace ClimbingGearBackend.Tests
     {
       return new UserGear
       {
-        UserGearId = 1,
+        Id = 1,
         GearId = 1,
         Quantity = 1,
         Gear = new Gear
@@ -117,7 +117,7 @@ namespace ClimbingGearBackend.Tests
     }
 
     [Fact]
-    public async Task GetUserGearWithInvalidUserGearId_ShouldReturnNotFound()
+    public async Task GetUserGearWithInvalidId_ShouldReturnNotFound()
     {
       var mockRepo = new Mock<IUserGearRepository>();
       var controller = new UserGearController(mockRepo.Object);
@@ -140,7 +140,7 @@ namespace ClimbingGearBackend.Tests
 
       var mockUserGear = new UserGear()
       {
-        UserGearId = 1,
+        Id = 1,
         UserId = "TestUserId",
         GearId = 1,
         Quantity = 42
@@ -162,7 +162,7 @@ namespace ClimbingGearBackend.Tests
 
       var mockUserGear = new UserGear()
       {
-        UserGearId = 666,
+        Id = 666,
         UserId = "TestUserId",
         GearId = 1,
         Quantity = 42
@@ -181,7 +181,7 @@ namespace ClimbingGearBackend.Tests
 
       var mockUserGear = new UserGear()
       {
-        UserGearId = 42,
+        Id = 42,
         UserId = "TestUserId",
         GearId = 1,
         Quantity = 42
